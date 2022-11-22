@@ -2,6 +2,13 @@
   "manifest_version": 3,
   "name": "Runestone Submission Downloader",
   "version": "6.9.420",
+  "host_permissions": [
+    "*://runestone.academy/"
+  ],
+  "permissions": [
+    "cookies",
+    "*://*/*"
+  ],
   "content_scripts": [
     {
       "matches": [
@@ -11,5 +18,8 @@
         "content-script.js"
       ]
     }
-  ]
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
 }
