@@ -1,6 +1,3 @@
-import JSZip from 'jszip';
-import {saveAs} from 'file-saver';
-
 const THEME = '#0f1b84';
 
 const questionsElement = Array.from(document.querySelectorAll('h3'))
@@ -83,100 +80,10 @@ const mark2Of2s = async (statusElement: HTMLDivElement) => {
     statusElement.textContent = 'Starting...';
     const problems = getProblems();
     const students = getStudents();
-    const promises = [];
-    const suspicious: {
-        problem: string;
-        student: { name: string; id: string; };
-    }[] = [];
-    problems.forEach(problem => {
-        students.forEach(async student => {
-            promises.push((async () => {
-                const {grade} = await getGrade(problem, student.id);
-                console.log(`Retrieved grade for ${student.name}'s ${problem} submission`);
-                if (grade === 10) {
-                    let done = false;
-                    while (!done) {
-                        try {
-                            const history = (await getSubmission(problem, student.id))
-                                .detail.history;
-                            if (history.length === 2) {
-                                suspicious.push({
-                                    problem,
-                                    student: {
-                                        name: student.name,
-                                        id: student.id
-                                    },
-                                });
-                            }
-                            statusElement.textContent = `Downloaded ${student.name}'s ${problem} submission`;
-                            done = true;
-                        } catch (e) {
-                            statusElement.textContent = `Retrying ${student.name}'s ${problem} submission`;
-                        }
-                    }
-                }
-            })());
-        });
-    });
-    await Promise.allSettled(promises);
-    statusElement.textContent = '';
-    const label = document.createElement('div');
-    label.innerText = 'Suspicious Submissions:';
-    statusElement.appendChild(label);
-    suspicious.forEach(({problem, student}) => {
-        const problemElement = document.createElement('div');
-        problemElement.style.backgroundColor = 'rgb(150, 150, 150);';
-        problemElement.style.color = 'white';
-        problemElement.style.padding = '5px';
-        problemElement.style.margin = '5px';
-        problemElement.style.width = 'fit-content';
-        problemElement.style.backgroundColor = '#1f1f1f';
-        problemElement.style.borderRadius = '5px';
-        problemElement.textContent = `${problem} by ${student.name}`;
-        // const diffElement = document.createElement('div');
-        // diffElement.style.display = 'none';
-        // problemElement.appendChild(diffElement);
-        statusElement.appendChild(problemElement);
-        const studentSelector = document.querySelector('#studentselector') as HTMLSelectElement;
-        const parentElement = studentSelector.parentElement;
-        problemElement.addEventListener('click', async e => {
-            (parentElement.querySelector(`option[value="${student.id}"]`) as HTMLOptionElement).selected = true;
-            await sleep(100);
-            studentSelector.dispatchEvent(new Event('change'));
-        });
-        problemElement.style.cursor = 'pointer';
 
-        // let show = false;
-        // let initial = true;
-        // let diffLib: Diff2HtmlUI | undefined = undefined;
-        // problemElement.addEventListener('click', async e => {
-        //   diffElement.style.display = show ? 'none' : 'block';
-        //   show = !show;
-        //   if (initial) {
-        //     initial = false;
-        //     const submission = (await getSubmission(problem, student.id))
-        //       .detail.history;
-        //     console.log(submission);
-        //     const initialSubmission = submission[0] ?? '';
-        //     const finalSubmission = submission[1] ?? '';
-        //     initial = false;
-        //     const parsed = createPatch(
-        //       'submission.py',
-        //       initialSubmission,
-        //       finalSubmission,
-        //       '',
-        //       ''
-        //     );
-        //     diffLib = new Diff2HtmlUI(
-        //       diffElement,
-        //       parsed
-        //     );
-        //     diffLib.draw();
-        //     diffElement.style.display = 'block';
-        //   }
-        // });
-        // diffElement.addEventListener('click', e => e.stopPropagation());
-
+    chrome.runtime.sendMessage({
+        command: "sendReq",
+        body: {problems, students, type: "submissioncount"}
     });
 };
 
@@ -190,5 +97,5 @@ const createMark2Of2Button = () => {
     });
 };
 
-createDownloaderButton();
+// createDownloaderButton();
 createMark2Of2Button();

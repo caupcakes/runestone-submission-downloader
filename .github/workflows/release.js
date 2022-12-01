@@ -1,5 +1,5 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { join, resolve } from 'path';
+import {readFileSync, writeFileSync} from 'fs';
+import {join, resolve} from 'path';
 
 const pathname = join(resolve(), '/manifest.json');
 const manifest = JSON.parse(readFileSync(pathname, 'utf8'));

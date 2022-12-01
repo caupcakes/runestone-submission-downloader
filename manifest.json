@@ -6,8 +6,7 @@
     "*://runestone.academy/"
   ],
   "permissions": [
-    "cookies",
-    "*://*/*"
+    "cookies"
   ],
   "content_scripts": [
     {
