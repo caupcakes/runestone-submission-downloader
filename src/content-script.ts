@@ -4,27 +4,6 @@ const questionsElement = Array.from(document.querySelectorAll('h3'))
     .filter(e => e.textContent === 'Questions')[0]
     .parentElement;
 
-const cleanse = (s: string) => s.replace(/[^a-z0-9]/gi, '_').toLowerCase();
-
-const getSubmission = async (problem: string, student: string) => {
-    return await (await fetch('https://runestone.academy/ns/assessment/gethist', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            acid: problem,
-            sid: student,
-        }),
-    })).json() as HistoryResponse;
-};
-
-const getGrade = async (problem: string, student: string) => {
-    return await (await fetch(`https://runestone.academy/runestone/admin/getGradeComments?acid=${problem}&sid=${student}`, {
-        method: 'GET',
-    })).json() as GradeResponse;
-};
-
 const getProblems = () => (
     Array.from(
         (
@@ -42,12 +21,9 @@ const sendRequests = async (statusElement: HTMLDivElement) => {
     const problems = getProblems();
     const students = getStudents();
 
-    await chrome.runtime.sendMessage({
-        body: JSON.stringify({
-            problems: problems,
-            students: students,
-            type: "submissioncount"
-        })
+    chrome.runtime.sendMessage({
+        command: "sendReq",
+        body: {problems, students, type: "submissioncount"}
     });
 };
 
