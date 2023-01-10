@@ -66,7 +66,7 @@ const getButton = () => {
 
 const createDownloaderButton = () => {
     const {button: b, status: s, wrapper: w} = getButton();
-    b.innerText = 'Download All Student Submissions for Selected Problems';
+    b.innerText = 'Submit All Student Submissions for Selected Problems';
     questionsElement.appendChild(w);
     b.addEventListener('click', e => {
         b.blur();
@@ -87,15 +87,5 @@ const mark2Of2s = async (statusElement: HTMLDivElement) => {
     });
 };
 
-const createMark2Of2Button = () => {
-    const {button: b, status: s, wrapper: w} = getButton();
-    b.innerText = 'Retrieve Fullscore 2 of 2 Submissions for Selected Problems';
-    questionsElement.appendChild(w);
-    b.addEventListener('click', e => {
-        b.blur();
-        mark2Of2s(s);
-    });
-};
-
-// createDownloaderButton();
-createMark2Of2Button();
+createDownloaderButton();
+// createMark2Of2Button();
