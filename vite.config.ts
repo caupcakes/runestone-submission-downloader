@@ -5,9 +5,8 @@ export default defineConfig({
     build: {
         assetsDir: './',
         rollupOptions: {
-            input: './src/content-script.ts',
+            input: {'content-script': './src/content-script.ts', 'background': './src/background.js'},
             output: {
-                format: 'iife',
                 dir: './dist',
                 entryFileNames: '[name].js',
             },
