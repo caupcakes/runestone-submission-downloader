@@ -23,7 +23,7 @@ const sendRequests = async (statusElement: HTMLDivElement) => {
 
     chrome.runtime.sendMessage({
         command: "sendReq",
-        body: {problems, students, type: "submissioncount"}
+        body: {problems, students, type: "majordiff"}
     });
 };
 
