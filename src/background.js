@@ -14,10 +14,14 @@ chrome.runtime.onMessage.addListener(function (message) {
 
             message.body.cookie = cookiestr
 
-            fetch("https://apcs-detection-frontend.hop.sh/submit", {
-                method: "POST",
-                body: JSON.stringify(message.body)
-            })
+            chrome.storage.local.get(["url"]).then((result) => {
+                fetch(result.key + "/submit", {
+                    method: "POST",
+                    body: JSON.stringify(message.body)
+                }).then(() => {
+                    console.log("submitted to " + result.key + "/submit")
+                })
+            });
         });
     }
 });

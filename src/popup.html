@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form>
+    <div>
+        <label for="url">Base URL: </label>
+        <input type="text" id="url" name="url" placeholder="https://apcs-detection-frontend.hop.sh/"/>
+    </div>
+    <div>
+        <button>Submit</button>
+    </div>
+</form>
+<script>
+    addEventListener("submit", (event) => {
+        chrome.storage.local.set({url: document.getElementById("url").value}).then(() => {
+        });
+    });
+</script>
+</body>
+</html>
